@@ -21,12 +21,12 @@ var imageNames = [
                   //path + "nz.jpg",
                   //path + "nz.jpg",
                   //path + "nz.jpg"
-				  path + "portal_wall.jpg",
-				  path + "portal_wall.jpg",
-				  path + "portal_wall.jpg",
-				  path + "portal_wall.jpg",
-				  path + "portal_wall.jpg",
-				  path + "portal_wall.jpg"
+				  path + "portal_wall_v2.jpg",
+				  path + "portal_wall_v2.jpg",
+				  path + "portal_wall_v2.jpg",
+				  path + "portal_wall_v2.jpg",
+				  path + "portal_wall_v2.jpg",
+				  path + "portal_wall_v2.jpg"
                   ];
 
 var axis = 'z';
@@ -178,6 +178,14 @@ function start()
   // (and the texture still works for the skybox).
   //var ourCubeMap = THREE.ImageUtils.loadTextureCube(imageNames);
   var ourCubeMap = THREE.ImageUtils.loadTextureCube(imageNames, THREE.CubeRefractionMapping);
+  ourCubeMap.wrapS = ourCubeMap.wrapT = THREE.RepeatWrapping;
+  ourCubeMap.repeat.set(1,1);
+  console.log(ourCubeMap);
+  
+  var wallTexture = new THREE.ImageUtils.loadTexture( path + "portal_wall_v2.jpg" );
+  wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
+  wallTexture.repeat.set(5,5);
+  var wallMaterial = new THREE.MeshBasicMaterial( { map: wallTexture, side: THREE.BackSide } );
   
   // Use a built-in Three.js shader for cube maps
   var cubeMapShader = THREE.ShaderLib["cube"];
@@ -190,10 +198,11 @@ function start()
   } );
 
   // Make a big ole cube for the skybox
-  var geometry = new THREE.BoxGeometry( 1000, 1000, 1000 );
+  var geometry = new THREE.BoxGeometry( 100, 100, 100 );
 
   // Create a mesh for the skybox using the cube shader as the material
-  var cube = new THREE.Mesh( geometry, material );
+  //var cube = new THREE.Mesh( geometry, material );
+  var cube = new THREE.Mesh( geometry.clone(), wallMaterial );
   
   // Add it to the scene
   scene.add( cube );
