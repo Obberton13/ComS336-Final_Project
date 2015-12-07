@@ -6,7 +6,7 @@
 // a couple of example cube maps
 //var path = "../images/park/";
 //var path = "../images/sky/";
-var path = "../images/portal_images/";
+var path = "./images/portal_images/";
 
 var imageNames = [
                   //path + "px.jpg",
@@ -21,6 +21,11 @@ var imageNames = [
                   //path + "nz.jpg",
                   //path + "nz.jpg",
                   //path + "nz.jpg"
+				  path + "portal_wall.jpg",
+				  path + "portal_wall.jpg",
+				  path + "portal_wall.jpg",
+				  path + "portal_wall.jpg",
+				  path + "portal_wall.jpg",
 				  path + "portal_wall.jpg"
                   ];
 
