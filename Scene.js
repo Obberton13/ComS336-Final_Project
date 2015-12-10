@@ -56,11 +56,13 @@ function cameraControl(c, ch)
 			return true;
 		case 'j':
 			q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0),  5 * Math.PI / 180);
+
 			q2 = new THREE.Quaternion().copy(c.quaternion);
 			c.quaternion.copy(q).multiply(q2);
 			return true;
 		case 'l':
 			q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0),  -5 * Math.PI / 180);
+
 			q2 = new THREE.Quaternion().copy(c.quaternion);
 			c.quaternion.copy(q).multiply(q2);
 			return true;

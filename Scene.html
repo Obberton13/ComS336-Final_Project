@@ -1,34 +1,33 @@
 <html>
-	<head>
-		<title>Skybox with Three.js app</title>
-	</head>
-	<body>
-	
-		<canvas id="theCanvas" width="1280" height="720">
-    Please use a browser that supports "canvas"
-    </canvas>
+<head>
+	<title>Skybox with Three.js app</title>
+</head>
+<body>
 
+<canvas id="theCanvas" width="1280" height="720">
+	Please use a browser that supports "canvas"
+</canvas>
 
 <p>
-Camera controls:
+	Camera controls:
+</p>
 <ul style="list-style:none;">
-<li>w, a, s, d - move forward, left, back, right
-<li>r, f - move up, down
-<li>i, j, k, l - look up, left, down, right
-<li>I, J, K, L - orbit down, right, up, left
-<li>O - face origin
-<li>p - put camera at origin
-<li>W - decrease fov
-<li>S - increase fov
+	<li>w, a, s, d - move forward, left, back, right
+	<li>r, f - move up, down
+	<li>i, j, k, l - look up, left, down, right
+	<li>I, J, K, L - orbit down, right, up, left
+	<li>O - face origin
+	<li>p - put camera at origin
+	<li>W - decrease fov
+	<li>S - increase fov
 </ul>
-	
-	<script src="http://threejs.org/build/three.min.js"></script>
-		<!--  script src="js/three.min.js"></script-->
-		
-		<!-- the OBJ file loader is not included in the regular three.js file -->
-		<script src="../threejs/OBJLoader.js"></script>
-		
-		<script src="Scene.js"></script>
-		<script>window.onload = start</script>
-	</body>
+
+<script src="threejs/three.js"></script>
+<!-- the OBJ file loader is not included in the regular three.js file -->
+<script src="threejs/OBJLoader.js"></script>
+<script src="Portal.js"></script>
+
+<script src="Scene.js"></script>
+<script>window.onload = start</script>
+</body>
 </html>
