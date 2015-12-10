@@ -21,13 +21,18 @@
 	<li>W - decrease fov
 	<li>S - increase fov
 </ul>
+	
+	<script src="http://threejs.org/build/three.min.js"></script>
+		<!--  script src="js/three.min.js"></script-->
+		
+		<!-- the OBJ file loader is not included in the regular three.js file -->
+		<script src="../threejs/OBJLoader.js"></script>
+		
+		<!-- @README NOT OUR SCRIPT. THIS IS TAKEN FROM THE EXAMPLES -->
+		<script src="./js/GPUParticleSystem.js" charset="utf-8"></script>
 
-<script src="threejs/three.js"></script>
-<!-- the OBJ file loader is not included in the regular three.js file -->
-<script src="threejs/OBJLoader.js"></script>
-<script src="Portal.js"></script>
-
-<script src="Scene.js"></script>
-<script>window.onload = start</script>
-</body>
+		
+		<script src="Scene.js"></script>
+		<script>window.onload = start</script>
+	</body>
 </html>
