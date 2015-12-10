@@ -10,7 +10,9 @@
 //				- How the Skybox is textured
 
 var path = "./images/portal_images/";
-var modelFilename = "../models/portal_objects/Portal Gun.obj";
+var modelFilename = "./models/portal_objects/Portal Gun.obj";
+var textureFilename = "./models/portal_objects/textures/portalgun_col.jpg";
+var normalFilename = "./models/portal_objects/textures/portalgun_nor.jpg";
 
 var axis = 'z';
 var paused = false;
@@ -37,22 +39,22 @@ function cameraControl(c, ch)
 	{
 		// camera controls
 		case 'w':
-			c.translateZ(-0.1);
+			c.translateZ(-0.5);
 			return true;
 		case 'a':
-			c.translateX(-0.1);
+			c.translateX(-0.5);
 			return true;
 		case 's':
-			c.translateZ(0.1);
+			c.translateZ(0.5);
 			return true;
 		case 'd':
-			c.translateX(0.1);
+			c.translateX(0.5);
 			return true;
 		case 'r':
-			c.translateY(0.1);
+			c.translateY(0.5);
 			return true;
 		case 'f':
-			c.translateY(-0.1);
+			c.translateY(-0.5);
 			return true;
 		case 'j':
 			q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0),  5 * Math.PI / 180);
@@ -147,6 +149,12 @@ function start()
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 	console.log(camera);
+	
+	var light = new THREE.PointLight(0xffffff, 1, 1000);
+	light.position.set(0,0,0);
+	scene.add(light);
+	light = new THREE.AmbientLight(0xffffff);
+	scene.add(light);
 
 	var ourCanvas = document.getElementById('theCanvas');
 	var renderer = new THREE.WebGLRenderer({canvas: ourCanvas});
@@ -156,21 +164,42 @@ function start()
 	wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
 	wallTexture.repeat.set(5,5);
 	var wallMaterial = new THREE.MeshBasicMaterial( { map: wallTexture, side: THREE.BackSide } );  
-	var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+	var geometry = new THREE.BoxGeometry( 10, 10, 10 );
 	var cube = new THREE.Mesh( geometry, wallMaterial );
 	scene.add( cube );
 
-	/*var loader = new THREE.OBJLoader();
+	var manager = new THREE.LoadingManager();
+	manager.onProgress = function ( item, loaded, total ) {
+		console.log( item, loaded, total );
+	};
+	
+	var gun_texture = new THREE.Texture();
+	var loader = new THREE.ImageLoader(manager);
+	loader.load(textureFilename, function(image){
+		gun_texture.image = image;
+		gun_texture.needsUpdate = true;
+	});
+	
+	var gun_normal = new THREE.Texture();
+	loader.load(normalFilename, function(image){
+		gun_normal.image = image;
+		gun_normal.needsUpdate = true;
+	});
+	
+	var loader = new THREE.OBJLoader();
 	loader.load( modelFilename, function ( object ) {
-		object.applyMatrix(new THREE.Matrix4().makeTranslation(0, 2, 0));
-		object.position.set(0, 3, 0);
+		//object.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 0));
+		//object.position.set(0, 0, 0);
 		object.traverse( function ( child )
 		{
-		  if ( child instanceof THREE.Mesh )
-			child.material.color.setRGB (1, 1, 0);
+			if ( child instanceof THREE.Mesh )
+			{
+				child.material.map = gun_texture;
+				child.material.normalMap = gun_normal;
+			}
 		});
 		scene.add( object );
-	});*/
+	});
 
 	var render = function () {
 		requestAnimationFrame( render );
