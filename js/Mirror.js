@@ -4,47 +4,32 @@
 
 THREE.ShaderLib[ 'mirror' ] = {
 
-	uniforms: { "mirrorColor": { type: "c", value: new THREE.Color( 0x7F7F7F ) },
-				"mirrorSampler": { type: "t", value: null },
+	uniforms: { "mirrorSampler": { type: "t", value: null },
 				"textureMatrix" : { type: "m4", value: new THREE.Matrix4() }
 	},
 
 	vertexShader: [
 
 		"uniform mat4 textureMatrix;",
-
 		"varying vec4 mirrorCoord;",
 
 		"void main() {",
-
 			"vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );",
 			"vec4 worldPosition = modelMatrix * vec4( position, 1.0 );",
 			"mirrorCoord = textureMatrix * worldPosition;",
 
 			"gl_Position = projectionMatrix * mvPosition;",
-
 		"}"
 
 	].join( "\n" ),
 
 	fragmentShader: [
-
-		"uniform vec3 mirrorColor;",
 		"uniform sampler2D mirrorSampler;",
-
 		"varying vec4 mirrorCoord;",
 
-		"float blendOverlay(float base, float blend) {",
-			"return( base < 0.5 ? ( 2.0 * base * blend ) : (1.0 - 2.0 * ( 1.0 - base ) * ( 1.0 - blend ) ) );",
-		"}",
-
 		"void main() {",
-
 			"vec4 color = texture2DProj(mirrorSampler, mirrorCoord);",
-			"color = vec4(blendOverlay(mirrorColor.r, color.r), blendOverlay(mirrorColor.g, color.g), blendOverlay(mirrorColor.b, color.b), 1.0);",
-
 			"gl_FragColor = color;",
-
 		"}"
 
 	].join( "\n" )
@@ -65,8 +50,6 @@ THREE.Mirror = function ( renderer, camera, options ) {
 	var height = options.textureHeight !== undefined ? options.textureHeight : 512;
 
 	this.clipBias = options.clipBias !== undefined ? options.clipBias : 0.0;
-
-	var mirrorColor = options.color !== undefined ? new THREE.Color( options.color ) : new THREE.Color( 0x7F7F7F );
 
 	this.renderer = renderer;
 	this.mirrorPlane = new THREE.Plane();
@@ -129,7 +112,6 @@ THREE.Mirror = function ( renderer, camera, options ) {
 	} );
 
 	this.material.uniforms.mirrorSampler.value = this.texture;
-	this.material.uniforms.mirrorColor.value = mirrorColor;
 	this.material.uniforms.textureMatrix.value = this.textureMatrix;
 
 	if ( ! THREE.Math.isPowerOfTwo( width ) || ! THREE.Math.isPowerOfTwo( height ) ) {
@@ -184,26 +166,26 @@ THREE.Mirror.prototype.updateTextureMatrix = function () {
 
 	this.rotationMatrix.extractRotation( this.matrixWorld );
 
-	this.normal.set( 0, 0, 1 );
+	this.normal.set(0, 0, 1 );
 	this.normal.applyMatrix4( this.rotationMatrix );
 
 	var view = this.mirrorWorldPosition.clone().sub( this.cameraWorldPosition );
-	view.reflect( this.normal ).negate();
+	//view.negate();//reflect( this.normal );//.negate();
 	view.add( this.mirrorWorldPosition );
 
 	this.rotationMatrix.extractRotation( this.camera.matrixWorld );
 
-	this.lookAtPosition.set( 0, 0, - 1 );
+	this.lookAtPosition.set( 0, 0, -1 );
 	this.lookAtPosition.applyMatrix4( this.rotationMatrix );
 	this.lookAtPosition.add( this.cameraWorldPosition );
 
 	var target = this.mirrorWorldPosition.clone().sub( this.lookAtPosition );
-	target.reflect( this.normal ).negate();
+	//target.negate();//reflect( this.normal );//.negate();
 	target.add( this.mirrorWorldPosition );
 
-	this.up.set( 0, - 1, 0 );
+	this.up.set( 0, -1, 0 );
 	this.up.applyMatrix4( this.rotationMatrix );
-	this.up.reflect( this.normal ).negate();
+	//this.up.negate();//reflect( this.normal );//.negate();
 
 	this.mirrorCamera.position.copy( view );
 	this.mirrorCamera.up = this.up;
