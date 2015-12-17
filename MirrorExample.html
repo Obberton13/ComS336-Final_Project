@@ -34,7 +34,7 @@
 <div id="info"><a href="http://threejs.org" target="_blank">three.js</a> - mirror
 </div>
 
-<script src="http://threejs.org/build/three.min.js"></script>
+<script src="http://threejs.org/build/three.js"></script>
 <script src="js/Mirror.js"></script>
 <script src="js/controls/OrbitControls.js"></script>
 
@@ -48,7 +48,7 @@
 	var VIEW_ANGLE = 45;
 	var ASPECT = WIDTH / HEIGHT;
 	var NEAR = 1;
-	var FAR = 500;
+	var FAR = 5000;
 
 	var camera, scene, renderer;
 
@@ -96,27 +96,33 @@
 
 		var mirrorMesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 30), groundMirror.material);
 		mirrorMesh.add(groundMirror);
-		mirrorMesh.rotateY(Math.PI / 2);
+//		mirrorMesh.rotateY(Math.PI);
 		mirrorMesh.position.y = 35;
-		mirrorMesh.position.x = -45;
+		mirrorMesh.position.z = -45;
+		mirrorMesh.position.x = -15;
 		scene.add(mirrorMesh);
+
+		//groundMirror.setOtherMirror(groundMirror);
 
 		verticalMirror = new THREE.Mirror(renderer, camera, {
 			clipBias: 0.003,
 			textureWidth: WIDTH,
 			textureHeight: HEIGHT,
-			color: 0x889999
+			color: 0x777777
 		});
 
 		var verticalMirrorMesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 30), verticalMirror.material);
 		verticalMirrorMesh.add(verticalMirror);
+//		verticalMirrorMesh.rotateY(Math.PI);
 		verticalMirrorMesh.position.y = 35;
 		verticalMirrorMesh.position.z = -45;
+		verticalMirrorMesh.position.x = 15;
 		scene.add(verticalMirrorMesh);
 
 		sphereGroup = new THREE.Object3D();
 		scene.add(sphereGroup);
 
+//		groundMirror.setOtherMirror(groundMirror);
 		verticalMirror.setOtherMirror(groundMirror);
 		groundMirror.setOtherMirror(verticalMirror);
 
@@ -191,6 +197,8 @@
 	function render() {
 
 		// render (update) the mirrors
+//		groundMirror.render();
+//		groundMirror.renderWithMirror(groundMirror);
 		groundMirror.renderWithMirror(verticalMirror);
 		verticalMirror.renderWithMirror(groundMirror);
 
