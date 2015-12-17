@@ -35,7 +35,7 @@
 </div>
 
 <script src="http://threejs.org/build/three.min.js"></script>
-<script src="js/Mirror.js"></script>
+<script src="js/Mirror_Clean.js"></script>
 <script src="js/controls/OrbitControls.js"></script>
 
 <script>
@@ -117,8 +117,8 @@
 		sphereGroup = new THREE.Object3D();
 		scene.add(sphereGroup);
 
-		verticalMirror.setOtherMirror(groundMirror);
-		groundMirror.setOtherMirror(verticalMirror);
+		//verticalMirror.setOtherMirror(groundMirror);
+		//groundMirror.setOtherMirror(verticalMirror);
 
 		var geometry = new THREE.CylinderGeometry(0.1, 15 * Math.cos(Math.PI / 180 * 30), 0.1, 24, 1);
 		var material = new THREE.MeshPhongMaterial({color: 0xffffff, emissive: 0x444444});

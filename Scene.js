@@ -145,12 +145,22 @@ function start()
 
 	var scene = new THREE.Scene();
 	camera = new THREE.PerspectiveCamera( 80, 16/9, 0.1, 1000 );
-	camera.position.x = 0;
+	camera.position.x = -5;
 	camera.position.y = 0;
-	camera.position.z = 5;
+	camera.position.z = -5;
 	camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-	console.log(camera);
+	
+	camera2 = new THREE.PerspectiveCamera( 80, 3/5, 0.1, 1000 );
+	camera2.position.x = 4.95;
+	camera2.position.y = 0;
+	camera2.position.z = 0;
+	camera2.lookAt(new THREE.Vector3(0, 0, 0));
+	
+	camera3 = new THREE.PerspectiveCamera( 80, 3/5, 0.1, 1000 );
+	camera3.position.x = 0;
+	camera3.position.y = 0;
+	camera3.position.z = 4.95;
+	camera3.lookAt(new THREE.Vector3(0, 0, 0));
 	
 	var light = new THREE.PointLight(0xffffff, 1, 1000);
 	light.position.set(0,0,0);
@@ -190,8 +200,6 @@ function start()
 	
 	var loader = new THREE.OBJLoader();
 	loader.load( modelFilename, function ( object ) {
-		//object.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 0));
-		//object.position.set(0, 0, 0);
 		object.traverse( function ( child )
 		{
 			if ( child instanceof THREE.Mesh )
@@ -202,6 +210,48 @@ function start()
 		});
 		scene.add( object );
 	});
+	
+	/*renderTarget = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
+	var planelikeGeometry = new THREE.CubeGeometry( 400, 200, 200 );
+	var plane = new THREE.Mesh( planelikeGeometry, new THREE.MeshBasicMaterial( { map: renderTarget } ) );
+	plane.position.set(0,100,-500);
+	scene.add(plane);
+	
+	renderer.render( scene, topCamera, renderTarget, true );
+	/*renderer.render( scene, topCamera );*/
+	
+	renderTarget_b = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
+	renderTarget_o = new THREE.WebGLRenderTarget( 512, 512, { format: THREE.RGBFormat } );
+	
+	// Draw the planes that are going to house our portals.
+	var geometry = new THREE.PlaneGeometry( 3, 5, 1, 1 );
+	//var material = new THREE.MeshBasicMaterial( {color: 0x229900, side: THREE.DoubleSide} );
+	var material = new THREE.MeshBasicMaterial( {map: renderTarget_b, side: THREE.DoubleSide} );
+	var b_portal = new THREE.Mesh( geometry, material );
+	b_portal.position.set(0,0,4.95);
+	scene.add( b_portal );
+	
+	var geometry = new THREE.PlaneGeometry( 3, 5, 1, 1 );
+	//var material = new THREE.MeshBasicMaterial( {color: 0xffccff, side: THREE.DoubleSide} );
+	var material = new THREE.MeshBasicMaterial( {map: renderTarget_o, side: THREE.DoubleSide} );
+	var o_portal = new THREE.Mesh( geometry, material );
+	o_portal.position.set(4.95,0,0);
+	o_portal.rotation.set(0,Math.PI/2,0);
+	scene.add( o_portal );
+	
+	// Give the planes identifying colors.
+	var geometry = new THREE.PlaneGeometry( 3.25, 5.25, 1, 1 );
+	var material = new THREE.MeshBasicMaterial( {color: 0x2299FF, side: THREE.DoubleSide} );
+	var b_portal_b = new THREE.Mesh( geometry, material );
+	b_portal_b.position.set(0,0,4.99);
+	scene.add( b_portal_b );
+	
+	var geometry = new THREE.PlaneGeometry( 3.25, 5.25, 1, 1 );
+	var material = new THREE.MeshBasicMaterial( {color: 0xffcc00, side: THREE.DoubleSide} );
+	var o_portal_b = new THREE.Mesh( geometry, material );
+	o_portal_b.position.set(4.99,0,0);
+	o_portal_b.rotation.set(0,Math.PI/2,0);
+	scene.add( o_portal_b );
 
 	var render = function () {
 		requestAnimationFrame( render );
@@ -220,6 +270,8 @@ function start()
 					break;
 			}
 		}
+		renderer.render(scene, camera2, renderTarget_b, true);
+		renderer.render(scene, camera3, renderTarget_o, true);
 		renderer.render(scene, camera);
 	};
 

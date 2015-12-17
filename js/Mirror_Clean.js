@@ -173,23 +173,51 @@ THREE.Mirror.prototype.renderWithMirror = function ( otherMirror ) {
 	otherMirror.updateTextureMatrix();
 
 };
-
+/*
+	this.renderer = renderer;
+	this.mirrorPlane = new THREE.Plane();
+	this.normal = new THREE.Vector3( 0, 0, 1 );
+	this.mirrorWorldPosition = new THREE.Vector3();
+	this.cameraWorldPosition = new THREE.Vector3();
+	this.rotationMatrix = new THREE.Matrix4();
+	this.lookAtPosition = new THREE.Vector3( 0, 0, - 1 );
+	this.clipPlane = new THREE.Vector4();
+*/
 THREE.Mirror.prototype.updateTextureMatrix = function () {
 
+	// Update Object3D MatrixWorld
 	this.updateMatrixWorld();
+	// Do the same with the Camera
 	this.camera.updateMatrixWorld();
 
+	// Set our mirror's position from the matrixWorld
 	this.mirrorWorldPosition.setFromMatrixPosition( this.matrixWorld );
+	// Same with the camera
 	this.cameraWorldPosition.setFromMatrixPosition( this.camera.matrixWorld );
 
+	// Set rotationMatrix to the rotation of matrixWorld
 	this.rotationMatrix.extractRotation( this.matrixWorld );
 
+	// Set the normal of the mirror to face the world's forward
 	this.normal.set( 0, 0, 1 );
+	// Actually rotate it to the object's forward
 	this.normal.applyMatrix4( this.rotationMatrix );
 
+	// NEW VARIABLE
+	// vector 3
+	// it is at the same position as the mirror but subtracted from the camera world position?
+	// What does this get us?
+	// This gets a vector from the camera to the mirror's position
+	console.log("Camera: " + this.mirrorWorldPosition);
 	var view = this.mirrorWorldPosition.clone().sub( this.cameraWorldPosition );
+	// Reflect said vector across the mirror's normal
 	view.reflect( this.normal ).negate();
+	// Add the mirror's position to said normal.
+	// What does this get us?
+	// It gets us the world coordinates of the cam
 	view.add( this.mirrorWorldPosition );
+	console.log(view);
+
 
 	this.rotationMatrix.extractRotation( this.camera.matrixWorld );
 
